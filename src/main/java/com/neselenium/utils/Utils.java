@@ -34,7 +34,6 @@ public final class Utils {
     static Stopwatch timer;
 
     public static String mobileType;
-
     private static ITestContext _context;
     public static AppiumDriverLocalService AppiumService;
     DesiredCapabilities cap = new DesiredCapabilities();
@@ -48,11 +47,9 @@ public final class Utils {
         return mobileType;
     }
 
-
     public static void setBrowserType(String appType) {
         mobileType = appType;
     }
-
 
     public static void sleep(int time) {
         try {
@@ -70,8 +67,9 @@ public final class Utils {
 
 
 
-    public static String getParam(ITestContext context, String value) {
-        return context.getCurrentXmlTest().getParameter(value);
+    public static String getParam(String value) {
+        System.out.println("Param [" + value + "] requested from context");
+        return getContext().getCurrentXmlTest().getParameter(value);
     }
 
 
@@ -219,7 +217,6 @@ public final class Utils {
     }
 
 
-
     public static void startTimer() {
         timer = Stopwatch.createStarted();
     }
@@ -235,7 +232,7 @@ public final class Utils {
         if (result.getStatus() == ITestResult.FAILURE) {
             Date date = new Date(System.currentTimeMillis());
             String dateString = date.toString();
-            String screenShotName = getParam(context, "ScreenShotDirectory") + dateString + result.getName() + ".png";
+            String screenShotName = getParam("ScreenShotDirectory") + dateString + result.getName() + ".png";
             File scrFile = ((TakesScreenshot) LocalDriverManager.getDriver()).getScreenshotAs(OutputType.FILE);
             try {
                 FileUtils.copyFile(scrFile, new File(screenShotName));
@@ -249,7 +246,7 @@ public final class Utils {
     public static void AppiumService(ITestContext context) {
 
         DesiredCapabilities serverCapabilities = new DesiredCapabilities();
-        serverCapabilities.setCapability(MobileCapabilityType.PLATFORM_NAME, getParam(context, "platformName"));
+        serverCapabilities.setCapability(MobileCapabilityType.PLATFORM_NAME, getParam("platformName"));
         serverCapabilities.setCapability(MobileCapabilityType.FULL_RESET, false);
         serverCapabilities.setCapability(MobileCapabilityType.NEW_COMMAND_TIMEOUT, 60);
 
@@ -257,7 +254,7 @@ public final class Utils {
             .buildService(new AppiumServiceBuilder().withCapabilities(serverCapabilities)
                 .withIPAddress("127.0.0.1")
                 .withArgument(GeneralServerFlag.SESSION_OVERRIDE)
-                .withArgument(GeneralServerFlag.LOG_LEVEL, getParam(context, "appiumLogLevel")));
+                .withArgument(GeneralServerFlag.LOG_LEVEL, getParam("appiumLogLevel")));
 
         AppiumService.start();
 
@@ -285,11 +282,11 @@ public final class Utils {
     public static void removeApp(ITestContext context) {
         String[] command =
             {
-                Utils.getParam(context, "adbLocation"),
+                Utils.getParam("adbLocation"),
                 "shell",
                 "pm",
                 "uninstall",
-                Utils.getParam(context, "appPackage")};
+                Utils.getParam("appPackage")};
 
         try {
 
@@ -306,11 +303,11 @@ public final class Utils {
 
         String[] command =
             {
-                Utils.getParam(context, "adbLocation"),
+                Utils.getParam("adbLocation"),
                 "shell",
                 "pm",
                 "clear",
-                Utils.getParam(context, "appPackage")};
+                Utils.getParam("appPackage")};
         Process execute = null;
         String returnValue = null;
 

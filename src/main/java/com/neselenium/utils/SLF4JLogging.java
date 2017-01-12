@@ -11,7 +11,7 @@ public class SLF4JLogging {
 
     public static void initLogger(final ITestContext context, final String className) {
 
-        System.setProperty(SimpleLogger.DEFAULT_LOG_LEVEL_KEY, Utils.getParam(context, "testLogLevel"));
+        System.setProperty(SimpleLogger.DEFAULT_LOG_LEVEL_KEY, Utils.getParam( "testLogLevel"));
         System.setProperty(SimpleLogger.DATE_TIME_FORMAT_KEY, "[yyyy/MM/dd HH:mm:ss]");
         System.setProperty(SimpleLogger.SHOW_DATE_TIME_KEY, "true");
         System.setProperty(SimpleLogger.LEVEL_IN_BRACKETS_KEY, "true");

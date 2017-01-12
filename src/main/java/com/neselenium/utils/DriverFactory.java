@@ -28,9 +28,8 @@ public class DriverFactory {
     }
 
 
-
     @SuppressWarnings("unchecked")
-    public static WebDriver createInstance(ITestContext context) {
+    public static void createInstance(ITestContext context) {
         WebDriver driver = null;
         DesiredCapabilities cap = new DesiredCapabilities();
         File app;
@@ -38,18 +37,18 @@ public class DriverFactory {
 
         Utils.setContext(context);
 
-        switch (Utils.getParam(context, "browse")) {
+        switch (Utils.getParam("browse")) {
             case "ANDROID_APP":
 
-                app = new File(Utils.getParam(context, "apkfile"));
+                app = new File(Utils.getParam("apkfile"));
                 cap.setCapability(MobileCapabilityType.APP, app.getAbsolutePath());
-                cap.setCapability(MobileCapabilityType.DEVICE_NAME, Utils.getParam(context, "device"));
-                cap.setCapability(AndroidMobileCapabilityType.APP_PACKAGE, Utils.getParam(context, "appPackage"));
-                cap.setCapability(AndroidMobileCapabilityType.APP_ACTIVITY, Utils.getParam(context, "appActivity"));
-                cap.setCapability(AndroidMobileCapabilityType.APP_WAIT_ACTIVITY, Utils.getParam(context, "appWaitActivity"));
-                cap.setCapability(MobileCapabilityType.UDID, Utils.getParam(context, "udid"));
-                cap.setCapability(MobileCapabilityType.PLATFORM_NAME, Utils.getParam(context, "platformName"));
-                cap.setCapability(MobileCapabilityType.PLATFORM_VERSION, Utils.getParam(context, "platformVersion"));
+                cap.setCapability(MobileCapabilityType.DEVICE_NAME, Utils.getParam("device"));
+                cap.setCapability(AndroidMobileCapabilityType.APP_PACKAGE, Utils.getParam("appPackage"));
+                cap.setCapability(AndroidMobileCapabilityType.APP_ACTIVITY, Utils.getParam("appActivity"));
+                cap.setCapability(AndroidMobileCapabilityType.APP_WAIT_ACTIVITY, Utils.getParam("appWaitActivity"));
+                cap.setCapability(MobileCapabilityType.UDID, Utils.getParam("udid"));
+                cap.setCapability(MobileCapabilityType.PLATFORM_NAME, Utils.getParam("platformName"));
+                cap.setCapability(MobileCapabilityType.PLATFORM_VERSION, Utils.getParam("platformVersion"));
                 cap.setCapability("autoLaunch", false);
                 cap.setCapability(MobileCapabilityType.NO_RESET, true);
 
@@ -59,11 +58,11 @@ public class DriverFactory {
                 break;
             case "IOS_APP":
 
-                cap.setCapability(MobileCapabilityType.DEVICE_NAME, Utils.getParam(context, "device"));
-                cap.setCapability(MobileCapabilityType.UDID, Utils.getParam(context, "udid"));
-                cap.setCapability(MobileCapabilityType.PLATFORM_NAME, Utils.getParam(context, "platformName"));
+                cap.setCapability(MobileCapabilityType.DEVICE_NAME, Utils.getParam("device"));
+                cap.setCapability(MobileCapabilityType.UDID, Utils.getParam("udid"));
+                cap.setCapability(MobileCapabilityType.PLATFORM_NAME, Utils.getParam("platformName"));
                 cap.setCapability(MobileCapabilityType.NO_RESET, true);
-                cap.setCapability(IOSMobileCapabilityType.BUNDLE_ID, Utils.getParam(context, "bundleID"));
+                cap.setCapability(IOSMobileCapabilityType.BUNDLE_ID, Utils.getParam("bundleID"));
                 //                cap.setCapability(IOSMobileCapabilityType.SEND_KEY_STRATEGY, "setValue");
 
                 driver = new IOSDriver<MobileElement>(Utils.AppiumService.getUrl(), cap);
@@ -71,24 +70,24 @@ public class DriverFactory {
 
             case "IOS_APP_SIM":
 
-                app = new File(Utils.getParam(context, "ipafile"));
+                app = new File(Utils.getParam("ipafile"));
                 cap.setCapability(MobileCapabilityType.APP, app.getAbsolutePath());
-                cap.setCapability(MobileCapabilityType.DEVICE_NAME, Utils.getParam(context, "device"));
-                cap.setCapability(MobileCapabilityType.PLATFORM_NAME, Utils.getParam(context, "platformName"));
+                cap.setCapability(MobileCapabilityType.DEVICE_NAME, Utils.getParam("device"));
+                cap.setCapability(MobileCapabilityType.PLATFORM_NAME, Utils.getParam("platformName"));
                 cap.setCapability(MobileCapabilityType.NO_RESET, true);
-                cap.setCapability(IOSMobileCapabilityType.BUNDLE_ID, Utils.getParam(context, "bundleID"));
+                cap.setCapability(IOSMobileCapabilityType.BUNDLE_ID, Utils.getParam("bundleID"));
 
                 driver = new IOSDriver<MobileElement>(Utils.AppiumService.getUrl(), cap);
                 break;
 
             case "CHROME":
-                file = new File(Utils.getParam(context, "driverpath"));
-                System.setProperty("webdriver.chrome.driver", file.getAbsolutePath());
+                file = new File(Utils.getParam("driverpath"));
+                setSystemProperty("webdriver.chrome.driver", file.getAbsolutePath());
                 driver = new ChromeDriver();
                 break;
             case "DOCKER_FF":
                 try {
-                    driver = new RemoteWebDriver(new URL(Utils.getParam(context, "docker_address")), DesiredCapabilities.firefox());
+                    driver = new RemoteWebDriver(new URL(Utils.getParam("docker_address")), DesiredCapabilities.firefox());
                 } catch (MalformedURLException e) {
                     // TODO Auto-generated catch block
                     e.printStackTrace();
@@ -96,15 +95,15 @@ public class DriverFactory {
                 break;
             case "DOCKER_CHROME":
                 try {
-                    driver = new RemoteWebDriver(new URL(Utils.getParam(context, "docker_address")), DesiredCapabilities.chrome());
+                    driver = new RemoteWebDriver(new URL(Utils.getParam("docker_address")), DesiredCapabilities.chrome());
                 } catch (MalformedURLException e) {
                     // TODO Auto-generated catch block
                     e.printStackTrace();
                 }
                 break;
             case "IE":
-                file = new File(Utils.getParam(context, "iedriver"));
-                System.setProperty("webdriver.ie.driver", file.getAbsolutePath());
+                file = new File(Utils.getParam("iedriver"));
+                setSystemProperty("webdriver.ie.driver", file.getAbsolutePath());
                 DesiredCapabilities capabilities = DesiredCapabilities.internetExplorer();
                 capabilities.setCapability("nativeEvents", true);
                 capabilities.setCapability("ignoreProtectedModeSettings", true);
@@ -115,7 +114,7 @@ public class DriverFactory {
                 break;
             case "HUBCHROME":
                 try {
-                    driver = new RemoteWebDriver(new URL(Utils.getParam(context, "docker_address")), DesiredCapabilities.chrome());
+                    driver = new RemoteWebDriver(new URL(Utils.getParam("docker_address")), DesiredCapabilities.chrome());
                 } catch (MalformedURLException e) {
                     // TODO Auto-generated catch block
                     e.printStackTrace();
@@ -124,22 +123,22 @@ public class DriverFactory {
             case "HUBFIREFOX":
                 try {
                     driver = new RemoteWebDriver(
-                        new URL(Utils.getParam(context, "docker_address")),
+                        new URL(Utils.getParam("docker_address")),
                         DesiredCapabilities.firefox());
                 } catch (MalformedURLException e) {
                     e.printStackTrace();
                 }
                 break;
             default:
-                file = new File(Utils.getParam(context, "driverpath"));
-                System.setProperty("webdriver.gecko.driver", file.getAbsolutePath());
+                file = new File(Utils.getParam("driverpath"));
+                setSystemProperty("webdriver.gecko.driver", file.getAbsolutePath());
                 driver = new FirefoxDriver();
                 break;
         }
 
-        Utils.setBrowserType(Utils.getParam(context, "browse"));
+        Utils.setBrowserType(Utils.getParam("browse"));
         LocalDriverManager.setWebDriver(driver);
-        return driver;
+        return;
     }
 
     public static WebDriver loadApp(ITestContext context) {
@@ -148,32 +147,32 @@ public class DriverFactory {
         DesiredCapabilities cap = new DesiredCapabilities();
         File app;
 
-        switch (Utils.getParam(context, "browse")) {
+        switch (Utils.getParam("browse")) {
             case "ANDROID_APP":
-                app = new File(Utils.getParam(context, "apkfile"));
+                app = new File(Utils.getParam("apkfile"));
                 cap.setCapability(MobileCapabilityType.APP, app.getAbsolutePath());
-                cap.setCapability(MobileCapabilityType.DEVICE_NAME, Utils.getParam(context, "device"));
-                cap.setCapability(AndroidMobileCapabilityType.APP_PACKAGE, Utils.getParam(context, "appPackage"));
-                cap.setCapability(AndroidMobileCapabilityType.APP_ACTIVITY, Utils.getParam(context, "appActivity"));
-                cap.setCapability(AndroidMobileCapabilityType.APP_WAIT_ACTIVITY, Utils.getParam(context, "appWaitActivity"));
-                cap.setCapability(MobileCapabilityType.UDID, Utils.getParam(context, "udid"));
-                cap.setCapability(MobileCapabilityType.PLATFORM_NAME, Utils.getParam(context, "platformName"));
-                cap.setCapability(MobileCapabilityType.PLATFORM_VERSION, Utils.getParam(context, "platformVersion"));
+                cap.setCapability(MobileCapabilityType.DEVICE_NAME, Utils.getParam("device"));
+                cap.setCapability(AndroidMobileCapabilityType.APP_PACKAGE, Utils.getParam("appPackage"));
+                cap.setCapability(AndroidMobileCapabilityType.APP_ACTIVITY, Utils.getParam("appActivity"));
+                cap.setCapability(AndroidMobileCapabilityType.APP_WAIT_ACTIVITY, Utils.getParam("appWaitActivity"));
+                cap.setCapability(MobileCapabilityType.UDID, Utils.getParam("udid"));
+                cap.setCapability(MobileCapabilityType.PLATFORM_NAME, Utils.getParam("platformName"));
+                cap.setCapability(MobileCapabilityType.PLATFORM_VERSION, Utils.getParam("platformVersion"));
 
                 driver = new AndroidDriver<MobileElement>(Utils.AppiumService.getUrl(), cap);
 
                 break;
 
             default:
-                app = new File(Utils.getParam(context, "apkfile"));
+                app = new File(Utils.getParam("apkfile"));
                 cap.setCapability(MobileCapabilityType.APP, app.getAbsolutePath());
-                cap.setCapability(MobileCapabilityType.DEVICE_NAME, Utils.getParam(context, "device"));
-                cap.setCapability(AndroidMobileCapabilityType.APP_PACKAGE, Utils.getParam(context, "appPackage"));
-                cap.setCapability(AndroidMobileCapabilityType.APP_ACTIVITY, Utils.getParam(context, "appActivity"));
-                cap.setCapability(AndroidMobileCapabilityType.APP_WAIT_ACTIVITY, Utils.getParam(context, "appWaitActivity"));
-                cap.setCapability(MobileCapabilityType.UDID, Utils.getParam(context, "udid"));
-                cap.setCapability(MobileCapabilityType.PLATFORM_NAME, Utils.getParam(context, "platformName"));
-                cap.setCapability(MobileCapabilityType.PLATFORM_VERSION, Utils.getParam(context, "platformVersion"));
+                cap.setCapability(MobileCapabilityType.DEVICE_NAME, Utils.getParam("device"));
+                cap.setCapability(AndroidMobileCapabilityType.APP_PACKAGE, Utils.getParam("appPackage"));
+                cap.setCapability(AndroidMobileCapabilityType.APP_ACTIVITY, Utils.getParam("appActivity"));
+                cap.setCapability(AndroidMobileCapabilityType.APP_WAIT_ACTIVITY, Utils.getParam("appWaitActivity"));
+                cap.setCapability(MobileCapabilityType.UDID, Utils.getParam("udid"));
+                cap.setCapability(MobileCapabilityType.PLATFORM_NAME, Utils.getParam("platformName"));
+                cap.setCapability(MobileCapabilityType.PLATFORM_VERSION, Utils.getParam("platformVersion"));
 
                 driver = new AndroidDriver<MobileElement>(Utils.AppiumService.getUrl(), cap);
 
@@ -181,15 +180,13 @@ public class DriverFactory {
         }
 
 
-        Utils.setBrowserType(Utils.getParam(context, "browse"));
+        Utils.setBrowserType(Utils.getParam("browse"));
         LocalDriverManager.setWebDriver(driver);
         return driver;
     }
 
-
-
-    private void setSystemProperty(String property) {
-        System.setProperty("webdriver.gecko.driver", "src/test/resources/geckodriver");
+    private static void setSystemProperty(String property, String path) {
+        System.setProperty(property, path);
     }
 
 

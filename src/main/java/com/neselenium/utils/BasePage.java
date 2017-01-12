@@ -3,7 +3,6 @@ package com.neselenium.utils;
 import java.awt.Toolkit;
 import java.awt.datatransfer.Clipboard;
 import java.awt.datatransfer.StringSelection;
-import java.util.List;
 
 import org.openqa.selenium.Alert;
 import org.openqa.selenium.By;
@@ -15,51 +14,14 @@ import org.openqa.selenium.WebElement;
 import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.support.ui.ExpectedCondition;
 import org.openqa.selenium.support.ui.ExpectedConditions;
-import org.openqa.selenium.support.ui.WebDriverWait;
-
-import io.appium.java_client.pagefactory.AndroidFindAll;
-import io.appium.java_client.pagefactory.AndroidFindBy;
 
 
-public class BasePage {
+public class BasePage extends LocalDriverManager {
 
-    public WebDriver driver;
-    public WebDriverWait wait;
+    private WebDriver driver = getDriver();
     public static String mobileType;
 
-    public BasePage(WebDriver driver) {
-        this.driver = driver;
-        wait = new WebDriverWait(driver, 60);  //I increased this to 60, as sometimes on the iPhone5 it taking longer for spinner, not sure if time of day or why..see if it fixes these waits.
-    }
-
-    @AndroidFindBy(uiAutomator = "new UiSelector().resourceId(\"android:id/alertTitle\")")
-    public WebElement AlertTitle;
-
-    @AndroidFindBy(uiAutomator = "new UiSelector().resourceId(\"android:id/message\")")
-    public WebElement AlertMessage;
-
-    @AndroidFindBy(uiAutomator = "new UiSelector().resourceId(\"android:id/button1\")")
-    public WebElement AlertOKButton;
-
-    @AndroidFindAll({
-        @AndroidFindBy(className = "android.widget.TextView")
-    })
-    public List<WebElement> findAllTextView;
-
-    @AndroidFindAll({
-        @AndroidFindBy(className = "android.widget.ImageView")
-    })
-    public List<WebElement> findAllImageView;
-
-    @AndroidFindAll({
-        @AndroidFindBy(className = "android.widget.RelativeLayout")
-    })
-    public List<WebElement> findAllRelativeLayout;
-
-    @AndroidFindAll({
-        @AndroidFindBy(className = "android.widget.RadioButton")
-    })
-    public List<WebElement> findAllRadioButton;
+    public BasePage() {}
 
     public boolean waitForTextToBePresent(WebElement element, String value) {
 
