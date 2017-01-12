@@ -12,6 +12,7 @@ import org.openqa.selenium.Dimension;
 import org.openqa.selenium.NoSuchElementException;
 import org.openqa.selenium.OutputType;
 import org.openqa.selenium.TakesScreenshot;
+import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.remote.DesiredCapabilities;
 import org.testng.Assert;
@@ -32,6 +33,7 @@ import io.appium.java_client.service.local.flags.GeneralServerFlag;
 public final class Utils {
 
     static Stopwatch timer;
+    static WebDriver driver = LocalDriverManager.getDriver();
 
     public static String mobileType;
     private static ITestContext _context;
@@ -65,48 +67,31 @@ public final class Utils {
         FIREFOX, IE, CHROME, ANDROID
     }
 
-
-
     public static String getParam(String value) {
-        System.out.println("Param [" + value + "] requested from context");
         return getContext().getCurrentXmlTest().getParameter(value);
     }
-
 
     @SuppressWarnings("unchecked")
     public static void launchApp(String app,
             String platformVersion, String baseurl) {
 
         if (app.contains("APP"))
-            ((AppiumDriver<MobileElement>) LocalDriverManager.getDriver()).launchApp();
+            ((AppiumDriver<MobileElement>) driver).launchApp();
         else
-            LocalDriverManager.getDriver().get(baseurl);
+            driver.get(baseurl);
 
     }
-
-    //    public static void switchToWebView(WebDriver driver, String browse,
-    //            String platformVersion,
-    //            String baseurl) {
-    //        if (browse.equals("ANDROID_APP") && Integer.parseInt(platformVersion) >= 19) {
-    //            ((AppiumDriver<?>) LocalDriverManager.getDriver()).context("XXXXXXXXXX");
-    //        } else if (browse.equals("ANDROID_APP") && Integer.parseInt(platformVersion) < 19) {
-    //            ((AppiumDriver<?>) LocalDriverManager.getDriver()).switchTo().window("WEBVIEW");
-    //        }
-    //
-    //    }
 
     public static void switchToNativeView(String browse,
             String platformVersion,
             String baseurl) {
         if (browse.equals("ANDROID_APP") && Integer.parseInt(platformVersion) >= 19) {
-            ((AppiumDriver<?>) LocalDriverManager.getDriver()).context("NATIVE_APP");
+            ((AppiumDriver<?>) driver).context("NATIVE_APP");
         } else if (browse.equals("ANDROID_APP") && Integer.parseInt(platformVersion) < 19) {
-            ((AppiumDriver<?>) LocalDriverManager.getDriver()).switchTo().window("NATIVE_APP");
+            ((AppiumDriver<?>) driver).switchTo().window("NATIVE_APP");
         }
 
     }
-
-
 
     @SuppressWarnings("unchecked")
     public static void scrollDownByNunberOfSwipes(int swipes) {
@@ -118,22 +103,22 @@ public final class Utils {
         Utils.sleep(2000);
 
         if (Utils.getBrowserType().contentEquals("ANDROID_APP")) {
-            dimensions = LocalDriverManager.getDriver().manage().window().getSize();
+            dimensions = driver.manage().window().getSize();
             screenHeightStart = dimensions.getHeight() * 0.5;
             scrollStart = screenHeightStart.intValue();
             screenHeightEnd = dimensions.getHeight() * 0.2;
             scrollEnd = screenHeightEnd.intValue();
             for (int i = 0; i < swipes; i++) {
-                ((AppiumDriver<MobileElement>) LocalDriverManager.getDriver()).swipe(0, scrollStart, 0, scrollEnd, 2000);
+                ((AppiumDriver<MobileElement>) driver).swipe(0, scrollStart, 0, scrollEnd, 2000);
             }
         } else {
-            dimensions = LocalDriverManager.getDriver().manage().window().getSize();
+            dimensions = driver.manage().window().getSize();
             screenHeightStart = dimensions.getHeight() * 0.3;
             scrollStart = screenHeightStart.intValue();
             screenHeightEnd = dimensions.getHeight() * 0.2;
             scrollEnd = screenHeightEnd.intValue();
             for (int i = 0; i < swipes; i++) {
-                ((AppiumDriver<MobileElement>) LocalDriverManager.getDriver()).swipe(0, scrollStart, 0, scrollEnd, 100);
+                ((AppiumDriver<MobileElement>) driver).swipe(0, scrollStart, 0, scrollEnd, 100);
             }
         }
 
@@ -152,13 +137,13 @@ public final class Utils {
 
         if (Utils.getBrowserType().contentEquals("ANDROID_APP")) {
 
-            dimensions = LocalDriverManager.getDriver().manage().window().getSize();
+            dimensions = driver.manage().window().getSize();
             screenHeightStart = dimensions.getHeight() * 0.5;
             scrollStart = screenHeightStart.intValue();
             screenHeightEnd = dimensions.getHeight() * 0.2;
             scrollEnd = screenHeightEnd.intValue();
             for (int i = 0; i < dimensions.getHeight(); i++) {
-                ((AppiumDriver<MobileElement>) LocalDriverManager.getDriver()).swipe(0, scrollEnd, 0, scrollStart, 2000);
+                ((AppiumDriver<MobileElement>) driver).swipe(0, scrollEnd, 0, scrollStart, 2000);
                 try {
                     if (element.isDisplayed())
                         break;
@@ -169,13 +154,13 @@ public final class Utils {
 
         } else {
 
-            dimensions = LocalDriverManager.getDriver().manage().window().getSize();
+            dimensions = driver.manage().window().getSize();
             screenHeightStart = dimensions.getHeight() * 0.3;
             scrollStart = screenHeightStart.intValue();
             screenHeightEnd = dimensions.getHeight() * 0.2;
             scrollEnd = screenHeightEnd.intValue();
             for (int i = 0; i < dimensions.getHeight(); i++) {
-                ((AppiumDriver<MobileElement>) LocalDriverManager.getDriver()).swipe(0, scrollEnd, 0, scrollStart, 100);
+                ((AppiumDriver<MobileElement>) driver).swipe(0, scrollEnd, 0, scrollStart, 100);
                 try {
                     if (element.isDisplayed())
                         break;
@@ -197,15 +182,15 @@ public final class Utils {
 
         if (Utils.getBrowserType().contentEquals("ANDROID_APP")) {
 
-            dimensions = LocalDriverManager.getDriver().manage().window().getSize();
+            dimensions = driver.manage().window().getSize();
             screenHeightStart = dimensions.getHeight() * 0.5;
             scrollStart = screenHeightStart.intValue();
             screenHeightEnd = dimensions.getHeight() * 0.2;
             scrollEnd = screenHeightEnd.intValue();
             for (int i = 0; i < dimensions.getHeight(); i++) {
-                ((AppiumDriver<MobileElement>) LocalDriverManager.getDriver()).swipe(0, scrollStart, 0, scrollEnd, 2000);
+                ((AppiumDriver<MobileElement>) driver).swipe(0, scrollStart, 0, scrollEnd, 2000);
                 try {
-                    if (((AndroidDriver<MobileElement>) LocalDriverManager.getDriver())
+                    if (((AndroidDriver<MobileElement>) driver)
                         .findElementByAndroidUIAutomator("new UiSelector().textContains(\"" + what + "\")") != null)
                         break;
                 } catch (NoSuchElementException e) {
@@ -226,14 +211,13 @@ public final class Utils {
         //System.out.println("Method took: [" + Utils.stopTimer() + "]");
     }
 
-
     public static void takeScreenShot(ITestContext context, ITestResult result) {
 
         if (result.getStatus() == ITestResult.FAILURE) {
             Date date = new Date(System.currentTimeMillis());
             String dateString = date.toString();
             String screenShotName = getParam("ScreenShotDirectory") + dateString + result.getName() + ".png";
-            File scrFile = ((TakesScreenshot) LocalDriverManager.getDriver()).getScreenshotAs(OutputType.FILE);
+            File scrFile = ((TakesScreenshot) driver).getScreenshotAs(OutputType.FILE);
             try {
                 FileUtils.copyFile(scrFile, new File(screenShotName));
             } catch (IOException e) {
