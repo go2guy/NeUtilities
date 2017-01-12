@@ -35,7 +35,7 @@ public final class Utils {
 
     public static String mobileType;
 
-
+    private static ITestContext _context;
     public static AppiumDriverLocalService AppiumService;
     DesiredCapabilities cap = new DesiredCapabilities();
     public AppiumDriverLocalService service = null;
@@ -331,6 +331,14 @@ public final class Utils {
 
         Utils.sleep(1000);
 
+    }
+
+    public static void setContext(ITestContext context) {
+        _context = context;
+    }
+
+    public static ITestContext getContext() {
+        return _context;
     }
 }
 

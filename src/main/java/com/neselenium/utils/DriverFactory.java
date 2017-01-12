@@ -28,12 +28,15 @@ public class DriverFactory {
     }
 
 
+
     @SuppressWarnings("unchecked")
     public static WebDriver createInstance(ITestContext context) {
         WebDriver driver = null;
         DesiredCapabilities cap = new DesiredCapabilities();
         File app;
         File file;
+
+        Utils.setContext(context);
 
         switch (Utils.getParam(context, "browse")) {
             case "ANDROID_APP":
@@ -182,4 +185,12 @@ public class DriverFactory {
         LocalDriverManager.setWebDriver(driver);
         return driver;
     }
+
+
+
+    private void setSystemProperty(String property) {
+        System.setProperty("webdriver.gecko.driver", "src/test/resources/geckodriver");
+    }
+
+
 }
